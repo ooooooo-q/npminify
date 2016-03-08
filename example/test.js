@@ -1,20 +1,4 @@
-# npminify
-
-To minify npm modules.
-
-
-## Usage
-
-
-```
-var npminify = require('npminify');
-npminify.distil(__dirname + '/source/package_name', __dirname + '/dist/package_name');
-```
-
-#### tarball distill with npm client.
-
-```
-var npminify = require('npminify');
+var npminify = require('../index.js');
 var RegClient = require('npm-registry-client');
 var unpack = require('tar-pack').unpack
 
@@ -26,7 +10,7 @@ var tarball = 'http://registry.npmjs.org/npm-registry-client/-/npm-registry-clie
 
 var sourceDir = __dirname + '/source/';
 var destDir = __dirname + '/dest/package_name';
-var result = __dirname + 'distiled_tarball.tgz';
+var result = __dirname + '/distiled_tarball.tgz';
 
 client.fetch(tarball, {}, function(err, res){
 
@@ -51,35 +35,8 @@ client.fetch(tarball, {}, function(err, res){
       .on('close', function () {
         console.log('done')
       })
+    }).catch(function(err){
+        console.error(err.stack)
     });
   }));
 });  
-```
-
-
-
-## API
-
-
-### distil(sourceDir, destDir, options) 
-
-To distil module. return `Promise<void>`
-
-
-### list(path, options)
-
-get the module files. return `Promise<Array<string>>`
-
-
-## todo
-
-- [ ] examples or tests
-- [ ] uglify option
-- [ ] bundle option
-- [ ] skip options(license, package name, postinstall ..)
-- [ ] detect dynamic require filenames
-
-
-
-
-
