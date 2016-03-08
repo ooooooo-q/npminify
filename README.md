@@ -8,52 +8,31 @@ To minify npm modules.
 
 ```
 var npminify = require('npminify');
-npminify.distil(__dirname + '/source/package_name', __dirname + '/dist/package_name');
+npminify.distil(__dirname + '/source/package_name', __dirname + '/dist/package_name')
+.then(function() { ... })
 ```
 
-#### tarball distill with npm client.
+#### distill tarball
+
+full source `/example/test.js`
 
 ```
-var npminify = require('npminify');
-var RegClient = require('npm-registry-client');
 var unpack = require('tar-pack').unpack
-
-var pack = require('tar-pack').unpack
+var pack = require('tar-pack').pack
 var write = require('fs').createWriteStream
-
-var client = new RegClient({});
-var tarball = 'http://registry.npmjs.org/npm-registry-client/-/npm-registry-client-7.1.0.tgz';
 
 var sourceDir = __dirname + '/source/';
 var destDir = __dirname + '/dest/package_name';
-var result = __dirname + 'distiled_tarball.tgz';
+var result = __dirname + '/distiled_tarball.tgz';
 
-client.fetch(tarball, {}, function(err, res){
+tarballResponse.pipe(unpack(sourceDir,minify));  
 
-  if (err){
-    console.error(err.stack)
-    return;
-  }
-
-  res.pipe(unpack(sourceDir, function (err) {
-    if (err){
-      console.error(err.stack)
-      return;
-    }
-
-    npminify.distil(sourceDir, destDir)
-    .then(function(){
-      pack(destDir)
-      .pipe(write(result))
-      .on('error', function (err) {
-        console.error(err.stack)
-      })
-      .on('close', function () {
-        console.log('done')
-      })
-    });
-  }));
-});  
+var minify = function(){
+  npminify.distil(sourceDir, destDir)
+  .then(function(){  
+    pack(destDir).pipe(write(result)));
+  });
+}
 ```
 
 

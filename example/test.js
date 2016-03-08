@@ -1,10 +1,10 @@
 var npminify = require('../index.js');
-var RegClient = require('npm-registry-client');
-var unpack = require('tar-pack').unpack
 
-var pack = require('tar-pack').unpack
+var unpack = require('tar-pack').unpack
+var pack = require('tar-pack').pack;
 var write = require('fs').createWriteStream
 
+var RegClient = require('npm-registry-client');
 var client = new RegClient({});
 var tarball = 'http://registry.npmjs.org/npm-registry-client/-/npm-registry-client-7.1.0.tgz';
 
